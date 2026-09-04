@@ -1,69 +1,321 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-        <h4 class="fw-bold text-dark mb-1">Daftar Rekapitulasi Kegiatan (1-25)</h4>
-        <p class="text-muted small">Dinas Perumahan & Kawasan Permukiman Kabupaten Musi Banyuasin</p>
-    </div>
-    <!-- Div penutup tombol sudah diperbaiki di sini -->
-    <div class="d-flex gap-2"> 
-        <a href="{{ route('kegiatan.cetakSemua') }}" target="_blank" class="btn btn-primary shadow-sm">
-            <i class="fa-solid fa-print me-2"></i>Print Semua
-        </a>
-        <a href="{{ route('kegiatan.create') }}" class="btn btn-success shadow-sm">
-            <i class="fa-solid fa-plus me-2"></i>Tambah Kegiatan
-        </a>
-    </div>
-</div>
 
-<div class="card border-0 shadow-sm p-4 bg-white">
-    <div style="background: white; padding: 20px;">
-        <div style="text-align: center; border-bottom: 3px solid #000; margin-bottom: 25px; padding-bottom: 10px;">
-            <h5 class="fw-bold">PEMERINTAH KABUPATEN MUSI BANYUASIN</h5>
-            <h6 class="fw-bold">DINAS PERUMAHAN DAN KAWASAN PERMUKIMAN</h6>
+<div class="container" style="padding: 20px;">
+
+    {{-- Tombol Tambah Kegiatan --}}
+    <a href="{{ route('kegiatan.create') }}"
+       class="btn btn-success"
+       style="
+            background:#28a745;
+            color:white;
+            padding:10px 18px;
+            text-decoration:none;
+            display:inline-block;
+            margin-bottom:20px;
+            border-radius:5px;
+       ">
+        + Tambah Kegiatan
+    </a>
+
+
+    {{-- Kertas / Tabel Utama --}}
+    <div style="
+        background:white;
+        padding:40px;
+        border:1px solid #ccc;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+        overflow-x:auto;
+    ">
+
+
+        {{-- Kop --}}
+        <div style="
+            text-align:center;
+            border-bottom:3px solid black;
+            margin-bottom:20px;
+            padding-bottom:10px;
+        ">
+
+            <h3 style="margin:0 0 5px 0;">
+                PEMERINTAH KABUPATEN MUSI BANYUASIN
+            </h3>
+
+            <h4 style="margin:0;">
+                DINAS PERUMAHAN DAN KAWASAN PERMUKIMAN
+            </h4>
+
+            <p style="margin:8px 0 0 0; font-size:14px;">
+                DATA KEGIATAN
+            </p>
+
         </div>
 
-        <table class="table table-bordered align-middle" style="font-size: 0.85rem;">
-            <thead class="table-light">
-                <tr>
-                    <th style="width: 5%;">NO</th>
-                    <th style="width: 15%;">NO DPA</th>
-                    <th style="width: 30%;">NAMA/NOMOR KEGIATAN</th>
-                    <th style="width: 30%;">KEGIATAN/SUB KEGIATAN</th>
-                    <th class="text-center" style="width: 20%;">AKSI</th>
+
+        {{-- Pesan sukses --}}
+        @if(session('success'))
+
+            <div style="
+                background:#d4edda;
+                color:#155724;
+                border:1px solid #c3e6cb;
+                padding:12px;
+                border-radius:5px;
+                margin-bottom:20px;
+            ">
+
+                {{ session('success') }}
+
+            </div>
+
+        @endif
+
+
+        {{-- Pesan error --}}
+        @if(session('error'))
+
+            <div style="
+                background:#f8d7da;
+                color:#721c24;
+                border:1px solid #f5c6cb;
+                padding:12px;
+                border-radius:5px;
+                margin-bottom:20px;
+            ">
+
+                {{ session('error') }}
+
+            </div>
+
+        @endif
+
+
+        {{-- Tabel --}}
+        <table
+            border="1"
+            style="
+                width:100%;
+                border-collapse:collapse;
+                font-size:13px;
+                min-width:950px;
+            "
+        >
+
+            <thead>
+
+                <tr style="background:#f2f2f2;">
+
+                    <th style="
+                        padding:10px;
+                        text-align:center;
+                        width:60px;
+                    ">
+                        No
+                    </th>
+
+                    <th style="
+                        padding:10px;
+                        text-align:center;
+                    ">
+                        No DPA
+                    </th>
+
+                    <th style="
+                        padding:10px;
+                        text-align:center;
+                    ">
+                        Nama Kegiatan
+                    </th>
+
+                    <th style="
+                        padding:10px;
+                        text-align:center;
+                    ">
+                        Kegiatan / Sub Kegiatan
+                    </th>
+
+                    <th style="
+                        padding:10px;
+                        text-align:center;
+                        width:280px;
+                    ">
+                        Aksi
+                    </th>
+
                 </tr>
+
             </thead>
+
+
             <tbody>
-                {{-- Gunakan take(25) untuk membatasi tampilan layar jadi 25 saja --}}
-                @forelse($kegiatans->take(25) as $key => $k)
-                <tr>
-                    <td class="text-center">{{ $key + 1 }}</td>
-                    <td>{{ $k->nomor_tanggal_dpa }}</td>
-                    <td>{{ $k->program_kegiatan }}</td>
-                    <td>{{ $k->sub_kegiatan }}</td>
-                    <td class="text-center">
-                        <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ route('kegiatan.edit', $k->id) }}" class="btn btn-sm btn-warning text-white">
-                                <i class="fa-solid fa-pen-to-square"></i> Edit
+
+                @forelse($kegiatans as $k)
+
+                    <tr>
+
+                        {{-- Nomor --}}
+                        <td style="
+                            padding:8px;
+                            text-align:center;
+                        ">
+                            {{ $loop->iteration }}
+                        </td>
+
+
+                        {{-- No DPA --}}
+                        <td style="
+                            padding:8px;
+                            vertical-align:top;
+                        ">
+
+                            {{ $k->nomor_tanggal_dpa ?? '-' }}
+
+                        </td>
+
+
+                        {{-- Nama Kegiatan --}}
+                        <td style="
+                            padding:8px;
+                            vertical-align:top;
+                        ">
+
+                            {{ $k->program_kegiatan ?? '-' }}
+
+                        </td>
+
+
+                        {{-- Kegiatan / Sub Kegiatan --}}
+                        <td style="
+                            padding:8px;
+                            vertical-align:top;
+                        ">
+
+                            <strong>
+                                {{ $k->kegiatan ?? '-' }}
+                            </strong>
+
+                            <br>
+
+                            <span style="color:#666;">
+                                {{ $k->sub_kegiatan ?? '-' }}
+                            </span>
+
+                        </td>
+
+
+                        {{-- Aksi --}}
+                        <td style="
+                            padding:8px;
+                            text-align:center;
+                            vertical-align:middle;
+                            white-space:nowrap;
+                        ">
+
+
+                            {{-- EDIT --}}
+                            <a
+                                href="{{ route('kegiatan.edit', $k->id) }}"
+                                style="
+                                    background:#ffc107;
+                                    color:#000;
+                                    padding:8px 12px;
+                                    text-decoration:none;
+                                    border-radius:5px;
+                                    display:inline-block;
+                                    margin:2px;
+                                    font-size:12px;
+                                "
+                            >
+                                ✏ Edit 25 Poin
                             </a>
-                            <form action="{{ route('kegiatan.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+
+
+                            {{-- PRINT --}}
+                            <a
+                                href="{{ route('kegiatan.print', $k->id) }}"
+                                target="_blank"
+                                style="
+                                    background:#dc3545;
+                                    color:#fff;
+                                    padding:8px 12px;
+                                    text-decoration:none;
+                                    border-radius:5px;
+                                    display:inline-block;
+                                    margin:2px;
+                                    font-size:12px;
+                                "
+                            >
+                                🖨 Print
+                            </a>
+
+
+                            {{-- HAPUS --}}
+                            <form
+                                action="{{ route('kegiatan.destroy', $k->id) }}"
+                                method="POST"
+                                style="
+                                    display:inline-block;
+                                    margin:2px;
+                                "
+                                onsubmit="return confirm('Yakin ingin menghapus data kegiatan ini?');"
+                            >
+
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-trash"></i> Hapus
+
+                                <button
+                                    type="submit"
+                                    style="
+                                        background:#6c757d;
+                                        color:#fff;
+                                        border:none;
+                                        padding:8px 12px;
+                                        border-radius:5px;
+                                        cursor:pointer;
+                                        font-size:12px;
+                                    "
+                                >
+                                    🗑 Hapus
                                 </button>
+
                             </form>
-                        </div>
-                    </td>
-                </tr>
+
+                        </td>
+
+                    </tr>
+
                 @empty
-                <tr>
-                    <td colspan="5" class="text-center py-4 text-muted">Data belum tersedia.</td>
-                </tr>
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            style="
+                                padding:30px;
+                                text-align:center;
+                                color:#777;
+                            "
+                        >
+
+                            <div style="font-size:35px; margin-bottom:10px;">
+                                📂
+                            </div>
+
+                            Belum ada data kegiatan.
+
+                        </td>
+
+                    </tr>
+
                 @endforelse
+
             </tbody>
+
         </table>
+
     </div>
+
 </div>
+
 @endsection

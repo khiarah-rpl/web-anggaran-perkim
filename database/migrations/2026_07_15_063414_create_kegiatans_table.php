@@ -1,41 +1,68 @@
-@extends('layouts.app') 
+<?php
 
-@section('content')
-<div class="container" style="padding: 20px;">
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-    <!-- Tombol Tambah yang selalu muncul di luar kertas -->
-    <a href="{{ route('kegiatan.create') }}" class="btn btn-success" style="background:#28a745; color:white; padding:10px; text-decoration:none; display:inline-block; margin-bottom: 20px;">
-        + Tambah Kegiatan
-    </a>
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('kegiatans', function (Blueprint $table) {
+            $table->id();
+            $table->string('no_dpa')->nullable();
+            $table->date('tgl_dpa')->nullable();
+            $table->text('nama_kegiatan')->nullable();
+            $table->text('sub_kegiatan')->nullable();
+            $table->string('kode_belanja')->nullable();
+            $table->decimal('pagu_anggaran', 20, 2)->nullable();
+            $table->string('no_spk')->nullable();
+            $table->date('tgl_spk')->nullable();
+            $table->string('no_addendum')->nullable();
+            $table->date('tgl_addendum')->nullable();
+            $table->string('nama_kontraktor')->nullable();
+            $table->text('alamat_kontraktor')->nullable();
+            $table->string('npwp')->nullable();
+            $table->string('no_rekening_bank')->nullable();
+            $table->decimal('nilai_kontrak', 20, 2)->nullable();
+            $table->text('uraian_pekerjaan')->nullable();
+            $table->string('syarat_pembayaran')->nullable();
 
-    <!-- Area Kertas -->
-    <div style="background: white; padding: 40px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        
-        <div style="text-align: center; border-bottom: 3px solid black; margin-bottom: 20px;">
-            <h3>PEMERINTAH KABUPATEN MUSI BANYUASIN</h3>
-            <h4>DINAS PERUMAHAN DAN KAWASAN PERMUKIMAN</h4>
-        </div>
+            $table->string('umk_status')->nullable();
+            $table->decimal('umk_nilai', 20, 2)->nullable();
+            $table->string('umk_fisik')->nullable();
 
-        <table border="1" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <tr style="background:#f2f2f2;">
-                <th>No</th>
-                <th>No DPA</th>
-                <th>Nama Kegiatan</th>
-                <th>Kegiatan/Sub Kegiatan</th>
-                <th>Aksi</th>
-            </tr>
-            @foreach($kegiatans as $k)
-            <tr>
-                <td style="padding: 8px;">{{ $loop->iteration }}</td>
-                <td style="padding: 8px;">{{ $k->nomor_tanggal_dpa }}</td>
-                <td style="padding: 8px;">{{ $k->program_kegiatan }}</td>
-                <td style="padding: 8px;">{{ $k->sub_kegiatan }}</td>
-                <td style="padding: 8px;">
-                    <a href="{{ route('kegiatan.edit', $k->id) }}">Edit 25 Poin</a>
-                </td>
-            </tr>
-            @endforeach
-        </table>
-    </div>
-</div>
-@endsection
+            $table->string('t1_status')->nullable();
+            $table->decimal('termin1', 20, 2)->nullable();
+            $table->string('fisik1')->nullable();
+
+            $table->string('t2_status')->nullable();
+            $table->decimal('termin2', 20, 2)->nullable();
+            $table->string('fisik2')->nullable();
+
+            $table->decimal('total_pembayaran', 20, 2)->nullable();
+
+            $table->string('no_spm')->nullable();
+            $table->date('tgl_spm')->nullable();
+            $table->decimal('nilai_spm', 20, 2)->nullable();
+            $table->text('terbilang_spm')->nullable();
+            $table->text('pembayaran_untuk')->nullable();
+            $table->integer('jangka_waktu')->nullable();
+            $table->integer('jangka_waktu_addendum')->nullable();
+            $table->date('tgl_mulai')->nullable();
+            $table->date('tgl_selesai')->nullable();
+            $table->date('tgl_selesai_addendum')->nullable();
+            $table->integer('waktu_pemeliharaan')->nullable();
+            $table->text('sanksi_denda')->nullable();
+            $table->string('kode_rup')->nullable();
+            $table->decimal('tkdn_persen', 5, 2)->nullable();
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('kegiatans');
+    }
+};
